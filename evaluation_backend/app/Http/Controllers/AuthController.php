@@ -18,7 +18,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => $request->password
         ]);
 
         return response()->json([
@@ -31,9 +31,16 @@ class AuthController extends Controller
     {
         $request->validated();
 
-        if(Auth::attempt($request->only('email', 'password'))) {
-            $token = $request->user()->createToken()->plainTextToken;
-            
+        $user = User::where($request->only('email', $request->email));
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => ''
+            ], 401);
+        }
+
+        $token = $user->createToken('token')->plainTextToken;
+
             return response()->json([
                 'message' => 'OK',
                 'data' => [
@@ -41,10 +48,6 @@ class AuthController extends Controller
                     'user_id' => $request->user()->id
                 ]
             ], 200);
-        }
-
-        return response()->json([
-            'message' => ''
-        ], 401);
     }
+
 }
