@@ -24,7 +24,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Module::class)->constrained()->onDelete('cascade');
-            $table->boolean('active');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
