@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
@@ -31,21 +32,21 @@ class AuthController extends Controller
     {
         $request->validated();
 
-        $user = User::where($request->only('email', $request->email));
+        $user = User::where($request->only('email', $request->email))->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password) ) {
             return response()->json([
                 'message' => ''
             ], 401);
         }
 
-        $token = $user->createToken('token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'message' => 'OK',
                 'data' => [
                     'token' => $token,
-                    'user_id' => $request->user()->id
+                    'user_id' => $user->id
                 ]
             ], 200);
     }
