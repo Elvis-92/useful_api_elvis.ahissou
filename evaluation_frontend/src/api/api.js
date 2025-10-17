@@ -9,6 +9,9 @@ const api = axios.create({
   },
 });
 
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');

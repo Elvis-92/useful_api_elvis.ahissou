@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink, RouterView } from 'vue-router';
 
 </script>
 
@@ -8,6 +9,13 @@
     Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
     documentation
   </p>
+
+  <nav>
+    <RouterLink to="/register">Register</RouterLink>
+    <RouterLink to="/login">Login</RouterLink>
+  </nav>
+
+  <RouterView />
 </template>
 
 <style scoped>
